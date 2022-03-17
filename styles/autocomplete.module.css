@@ -1,0 +1,15 @@
+.list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+.listComponents {
+  padding: 0;
+  margin: 0;
+}
+.active,
+.listComponents:hover {
+  background-color: darkgray;
+  cursor: pointer;
+  font-weight: 700;
+}
