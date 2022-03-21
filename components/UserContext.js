@@ -5,18 +5,19 @@ export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [session, setSession] = useState(null);
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
   const [sessionLoading, setSessionLoading] = useState(true);
-  const [userData, setUserData] = useState(null)
+  const [userData, setUserData] = useState(null);
   const [name, setName] = useState("");
   const [nameLoading, setNameLoading] = useState(true);
   const [nameModleLoading, setNameModleLoading] = useState(true);
   const [events, setEvents] = useState();
   const [eventsLoading, setEventsLoading] = useState(true);
-  const [facilities, setFacilities] = useState()
-  const [facilitiesLoading, setFacilitiesLoading] = useState(true)
+  const [facilities, setFacilities] = useState();
+  const [facilitiesLoading, setFacilitiesLoading] = useState(true);
   const [studentNames, setStudentNames] = useState();
-  const [showMessaging, setShowMessaging] = useState(false)
+  const [showMessaging, setShowMessaging] = useState(false);
+  const [uuidName, setUuidName] = useState();
 
   useEffect(() => {
     setSession(supabase.auth.session());
@@ -29,11 +30,11 @@ export const UserProvider = ({ children }) => {
 
   const selectUserData = async () => {
     let { data, error } = await supabase
-    .from("profiles")
-    .select()
-    .eq("id", session.user.id);
-  setUserData(data);
-  }
+      .from("profiles")
+      .select()
+      .eq("id", session.user.id);
+    setUserData(data);
+  };
 
   const selectUser = async () => {
     let { data, error } = await supabase
@@ -46,19 +47,24 @@ export const UserProvider = ({ children }) => {
 
   const selectEvents = async () => {
     let { data, error } = await supabase.from("events").select();
-    setEvents(data)
-    setEventsLoading(false)
+    setEvents(data);
+    setEventsLoading(false);
   };
 
   const selectLocation = async () => {
     let { data, error } = await supabase.from("facilities").select();
-    setFacilities(data)
-    setFacilitiesLoading(false)
-  }
+    setFacilities(data);
+    setFacilitiesLoading(false);
+  };
 
   const selectStudents = async () => {
     let { data, error } = await supabase.from("profiles").select("name");
     setStudentNames(data);
+  };
+
+  const selectUuidName = async () => {
+    let { data, error } = await supabase.from("profiles").select("id,name");
+    setUuidName(data);
   };
 
   useEffect(() => {
@@ -68,7 +74,8 @@ export const UserProvider = ({ children }) => {
       selectEvents();
       selectLocation();
       selectStudents();
-      setLoading(false)
+      selectUuidName();
+      setLoading(false);
     }
   }, [session]);
 
@@ -107,6 +114,8 @@ export const UserProvider = ({ children }) => {
         setStudentNames,
         showMessaging,
         setShowMessaging,
+        uuidName,
+        setUuidName,
       }}
     >
       {children}
