@@ -54,7 +54,7 @@ const Calendar = () => {
 
   return (
     <>
-      {user.eventsLoading == false ? (
+      {user.loading == false ? (
         <>
           <Destop>
             <div style={{ marginLeft: "2.5%", marginRight: "2.5%" }}>

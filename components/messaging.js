@@ -36,6 +36,7 @@ export default function Messaging(props) {
           size="lg"
           backdrop="static"
           dialogClassName="modal-90hw"
+          aria-labelledby="contained-modal-title-vcenter"
           centered
         >
           <Modal.Header>
@@ -53,7 +54,7 @@ export default function Messaging(props) {
                       user.userData[0].messaging_contacts.contact[0]
                     }
                   >
-                    <Row>
+                    <Row style={{ marginRight: "0px", marginLeft: "0px" }}>
                       <Contacts />
                       <Messages activeTab={activeTab} props={props} />
                     </Row>

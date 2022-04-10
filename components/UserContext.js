@@ -9,12 +9,9 @@ export const UserProvider = ({ children }) => {
   const [sessionLoading, setSessionLoading] = useState(true);
   const [userData, setUserData] = useState(null);
   const [name, setName] = useState("");
-  const [nameLoading, setNameLoading] = useState(true);
   const [nameModleLoading, setNameModleLoading] = useState(true);
   const [events, setEvents] = useState();
-  const [eventsLoading, setEventsLoading] = useState(true);
   const [facilities, setFacilities] = useState();
-  const [facilitiesLoading, setFacilitiesLoading] = useState(true);
   const [studentNames, setStudentNames] = useState();
   const [showMessaging, setShowMessaging] = useState(false);
   const [uuidName, setUuidName] = useState();
@@ -41,20 +38,17 @@ export const UserProvider = ({ children }) => {
       .from("profiles")
       .select("name")
       .eq("id", session.user.id);
-    setNameLoading(false);
     setName(data[0].name);
   };
 
   const selectEvents = async () => {
     let { data, error } = await supabase.from("events").select();
     setEvents(data);
-    setEventsLoading(false);
   };
 
   const selectLocation = async () => {
     let { data, error } = await supabase.from("facilities").select();
     setFacilities(data);
-    setFacilitiesLoading(false);
   };
 
   const selectStudents = async () => {
@@ -68,7 +62,7 @@ export const UserProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (session != null) {
+    if (session != null && sessionLoading == false) {
       selectUserData();
       selectUser();
       selectEvents();
@@ -89,27 +83,21 @@ export const UserProvider = ({ children }) => {
     <UserContext.Provider
       value={{
         session,
+        setSession,
         loading,
         setLoading,
-        setSession,
         sessionLoading,
         setSessionLoading,
         userData,
         setUserData,
         name,
         setName,
-        nameLoading,
-        setNameLoading,
         nameModleLoading,
         setNameModleLoading,
         events,
         setEvents,
-        eventsLoading,
-        setEventsLoading,
         facilities,
         setFacilities,
-        facilitiesLoading,
-        setFacilitiesLoading,
         studentNames,
         setStudentNames,
         showMessaging,

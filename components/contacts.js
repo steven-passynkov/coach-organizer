@@ -1,4 +1,4 @@
-import { Button, Form, Col, Nav, InputGroup } from "react-bootstrap";
+import { Button, Form, Col, Container, Nav, InputGroup } from "react-bootstrap";
 import { useContext } from "react";
 import { UserContext } from "./UserContext";
 import Image from "next/image";
@@ -9,7 +9,7 @@ export default function Contacts() {
   const user = useContext(UserContext);
 
   return (
-    <Col lg={5} sm={5} style={{ paddingRight: "0px" }}>
+    <Col lg={5} sm={5} style={{ padding: "0px" }}>
       <div
         style={{
           backgroundColor: "#f2f2f2",
@@ -37,44 +37,54 @@ export default function Contacts() {
             <Nav.Item key={el}>
               <Nav.Link style={{ height: "4rem" }} eventKey={el}>
                 {user.uuidName != null ? (
-                  <>
-                    <Image
-                      src={icon}
-                      height="40"
-                      width="30"
-                      className={styles.profilePicture}
-                    />
-                    <a
-                      style={{
-                        position: "absolute",
-                        marginBottom: "1rem",
-                        paddingLeft: "1rem",
-                      }}
-                    >
-                      {user.uuidName.find((item) => item.id === `${el}`).name}
-                    </a>
-                    <a
-                      style={{
-                        position: "absolute",
-                        paddingLeft: "9.5rem",
-                        fontSize: "14px",
-                      }}
-                    >
-                      5:00pm
-                    </a>
-                    <a
-                      style={{
-                        paddingLeft: "1rem",
-                        fontSize: "14px",
-                      }}
-                    >
-                      Last message
-                    </a>
-                  </>
+                  <Container>
+                    <div className="d-flex">
+                      <div className="d-flex justify-content-start">
+                        <Image
+                          src={icon}
+                          height="40"
+                          width="30"
+                          className={styles.profilePicture}
+                        />
+                      </div>
+                      <div
+                        className="d-flex justify-content-center"
+                        style={{
+                          position: "absolute",
+                          paddingLeft: "2.5rem",
+                        }}
+                      >
+                        {user.uuidName.find((item) => item.id === `${el}`).name}
+                      </div>
+                      <div
+                        className="d-flex justify-content-end"
+                        style={{
+                          position: "absolute",
+                          paddingLeft: "70%",
+                          fontSize: "14px",
+                        }}
+                      >
+                        5:00pm
+                      </div>
+
+                      <div
+                        className="d-flex align-items-end"
+                        style={{
+                          fontSize: "14px",
+                          paddingLeft: "0.6rem",
+                        }}
+                      >
+                        Last message
+                      </div>
+                    </div>
+                  </Container>
                 ) : (
                   <></>
                 )}
               </Nav.Link>
+              <hr
+                style={{ marginTop: "5px", marginBottom: "5px", width: "80%" }}
+              />
             </Nav.Item>
           ))}
         </Nav>
