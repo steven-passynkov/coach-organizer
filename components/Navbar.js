@@ -5,13 +5,11 @@ import Logout from "./logout";
 import { useContext, useState } from "react";
 import { UserContext } from "./UserContext";
 import Lessons from "./lessons";
-import Messaging from "./messaging";
 import Settings from "./settings";
 
 export default function Nav_bar() {
   const user = useContext(UserContext);
   const [showLessons, setShowLessons] = useState(false);
-  const [showMessaging, setShowMessaging] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
 
   return (
@@ -23,9 +21,6 @@ export default function Nav_bar() {
           <Nav className="mr-auto">
             <Nav.Link href="/">Calendar</Nav.Link>
             <Nav.Link onClick={() => setShowLessons(true)}>Lessons</Nav.Link>
-            <Nav.Link onClick={() => setShowMessaging(true)}>
-              Messaging
-            </Nav.Link>
           </Nav>
           <NavDropdown title={user.name} id="basic-nav-dropdown">
             <NavDropdown.Item onClick={() => setShowSettings(true)}>
@@ -40,7 +35,6 @@ export default function Nav_bar() {
       </Navbar>
 
       <Lessons show={showLessons} onHide={() => setShowLessons(false)} />
-      <Messaging show={showMessaging} onHide={() => setShowMessaging(false)} />
       <Settings show={showSettings} onHide={() => setShowSettings(false)} />
     </>
   );
