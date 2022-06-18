@@ -1,12 +1,55 @@
 import { Button, Form, Col, Container, Nav, InputGroup } from "react-bootstrap";
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { UserContext } from "./UserContext";
+import { supabase } from "../utils/supabaseClient";
 import Image from "next/image";
 import icon from "../public/smiley.png";
 import styles from "../styles/message.module.css";
 
 export default function Contacts() {
   const user = useContext(UserContext);
+
+  const [messages, setMessages] = useState({});
+  const [latestMessages, setLatestMessages] = useState();
+
+  const selectMessages = async () => {
+    let { data, error } = await supabase
+      .from("messaging")
+      .select("*")
+      .or(
+        `profile_sent.eq.${user.userData[0].id},and(profile_received.eq.${user.userData[0].messaging_contacts.contact[2]})`
+      );
+  };
+
+  selectMessages();
+
+  useEffect(() => {
+    setMessages(
+      user.userData[0].messaging_contacts.contact.map(
+        (id, index) =>
+          user.messages.filter(
+            (messages) =>
+              messages.profile_sent ===
+                `${user.userData[0].messaging_contacts.contact[index]}` ||
+              messages.profile_received ===
+                `${user.userData[0].messaging_contacts.contact[index]}`
+          )
+        //.slice(-1)[0].message
+      )
+    );
+  }, [user.messages]);
+
+  useEffect(() => {
+    if (messages !== []) {
+      setLatestMessages(
+        user.userData[0].messaging_contacts.contact.map((id, index) => {
+          if (messages[index] !== "") {
+            console.log(":",messages[index])
+          }
+        })
+      );
+    }
+  }, [messages]);
 
   return (
     <Col lg={5} sm={5} style={{ padding: "0px" }}>
@@ -35,10 +78,10 @@ export default function Contacts() {
         <Nav variant="pills" className="flex-column">
           {(user.userData[0].messaging_contacts.contact || []).map((el) => (
             <Nav.Item key={el}>
-              <Nav.Link style={{ height: "4rem" }} eventKey={el}>
-                {user.uuidName != null ? (
-                  <Container>
-                    <div className="d-flex">
+              <Nav.Link key={el} style={{ height: "4rem" }} eventKey={el}>
+                {user.uuidName !== null ? (
+                  <Container key={el}>
+                    <div key={el} className="d-flex">
                       <div className="d-flex justify-content-start">
                         <Image
                           src={icon}
@@ -64,7 +107,13 @@ export default function Contacts() {
                           fontSize: "14px",
                         }}
                       >
-                        5:00pm
+                        {new Date(
+                          `${
+                            user.messages[user.messages.length - 1].created_at
+                          }`
+                        ).toLocaleString("en", {
+                          timeZoneName: "short",
+                        })}
                       </div>
 
                       <div
@@ -74,7 +123,7 @@ export default function Contacts() {
                           paddingLeft: "0.6rem",
                         }}
                       >
-                        Last message
+                        {console.log(messages)}
                       </div>
                     </div>
                   </Container>

@@ -10,7 +10,7 @@ export default function CalendarPage() {
   const user = useContext(UserContext);
 
   useEffect(() => {
-    if (user.session != null && user.sessionLoading == false) {
+    if (user.session !== null && user.sessionLoading == false) {
       if (user.name == null) {
         setModalShow(true);
       }

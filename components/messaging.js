@@ -1,19 +1,5 @@
-import {
-  Modal,
-  Button,
-  Form,
-  Tab,
-  Row,
-  Col,
-  Container,
-  Nav,
-  InputGroup,
-} from "react-bootstrap";
+import { Modal, Button, Tab, Row } from "react-bootstrap";
 import { useEffect, useState, useContext } from "react";
-import Image from "next/image";
-import icon from "../public/smiley.png";
-import styles from "../styles/message.module.css";
-import { supabase } from "../utils/supabaseClient";
 import { UserContext } from "./UserContext";
 import Contacts from "./contacts.js";
 import Messages from "./messages.js";
@@ -23,14 +9,32 @@ export default function Messaging(props) {
   const [activeTab, setActiveTab] = useState();
 
   useEffect(() => {
-    if (user.loading == false) {
+    if (user.userData != null) {
       setActiveTab(user.userData[0].messaging_contacts.contact[0]);
     }
-  }, [props.show]);
-
+  }, [user.userData]);
+/*
+  useEffect(() => {
+    if (user.userData != null && user.messages != null) {
+      function checkMessageProfile(id) {
+        return (
+          (id.profile_sent == `${user.userData[0].id}` &&
+            id.profile_received === `${activeTab}`) ||
+          (id.profile_sent == `${activeTab}` &&
+            id.profile_received === `${user.userData[0].id}`)
+        );
+      }
+      console.log(
+        "profile: ",
+        activeTab,
+        user.messages.filter(checkMessageProfile)
+      );
+    }
+  }, [user.userData, user.messages, activeTab]);
+*/
   return (
     <>
-      {user.userData != null ? (
+      {user.userData != null && user.messages != null ? (
         <Modal
           {...props}
           size="lg"
