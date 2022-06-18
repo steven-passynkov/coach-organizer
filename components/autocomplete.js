@@ -58,7 +58,7 @@ export default function Autocomplete({ suggestions, value, onValue }) {
       setActive();
     }
     if (key === "ArrowUp") {
-      if (active != 0) {
+      if (active !== 0) {
         setActive(active - 1);
       }
     }
@@ -137,7 +137,7 @@ export default function Autocomplete({ suggestions, value, onValue }) {
   };
 
   const renderStudentList = () => {
-    if (studentList.length != 0) {
+    if (studentList.length !== 0) {
       return (
         <>
           {studentList.map((el) => (

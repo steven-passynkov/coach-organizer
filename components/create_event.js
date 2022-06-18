@@ -36,7 +36,7 @@ export const CreateEvent = (props) => {
   }, [user]);
 
   useEffect(() => {
-    if (coach != user.name) {
+    if (coach !== user.name) {
       setCoach(`${user.name}`);
     }
   }, [props.onHide]);
@@ -55,7 +55,7 @@ export const CreateEvent = (props) => {
     if (dateValue === null || timeValueOne === null || timeValueTwo === null) {
       return;
     }
-    if (dateValue != "" && timeValueOne != "" && timeValueTwo != "") {
+    if (dateValue !== "" && timeValueOne !== "" && timeValueTwo !== "") {
       //see if formated right
       console.log("filled");
     } else {

@@ -40,7 +40,7 @@ const Calendar = () => {
     return isTablet ? children : null;
   };
 
-  const calEvents = useMemo(()=> {
+  const callEvents = useMemo(()=> {
     if(!user) return [];
 
     return (user.events || []).map(event => {
@@ -87,7 +87,7 @@ const Calendar = () => {
                   center: "title",
                   right: "dayGridMonth,timeGridWeek,timeGridDay",
                 }}
-                events={calEvents}
+                events={callEvents}
                 businessHours={[
                   {
                     daysOfWeek: [1, 2, 3, 4, 5, 6],
@@ -103,7 +103,6 @@ const Calendar = () => {
           </Destop>
           <Mobile>
             <div style={{ marginLeft: "2.5%", marginRight: "2.5%" }}>
-              <h2></h2>
               <FullCalendar
                 plugins={[
                   timeGridPlugin,

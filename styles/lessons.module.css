@@ -1,0 +1,6 @@
+.lessons {
+    padding-top: 0px;
+    overflow-y: auto;
+    max-height: 500px;
+    height: 100vh !important;
+  }

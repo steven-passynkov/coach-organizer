@@ -1,6 +1,6 @@
 .messaging {
   padding: 0;
-  overflow-y: scroll;
+  overflow-y: auto;
   max-height: 500px;
   height: 100vh !important;
 }
@@ -43,7 +43,7 @@
   padding-top: 10px !important;
 }
 .messageSent {
-  background-color: #007bff;
+  background-color: #d7d7d7;
   display: inline-block;
   margin-bottom: 14px;
   margin-top: 14px;

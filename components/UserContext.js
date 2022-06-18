@@ -5,16 +5,19 @@ export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [session, setSession] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [sessionLoading, setSessionLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
   const [name, setName] = useState("");
   const [nameModleLoading, setNameModleLoading] = useState(true);
-  const [events, setEvents] = useState();
-  const [facilities, setFacilities] = useState();
-  const [studentNames, setStudentNames] = useState();
-  const [showMessaging, setShowMessaging] = useState(false);
-  const [uuidName, setUuidName] = useState();
+  const [events, setEvents] = useState(null);
+  const [facilities, setFacilities] = useState(null);
+  const [studentNames, setStudentNames] = useState(null);
+  const [uuidName, setUuidName] = useState(null);
+  const [messages, setMessages] = useState(null);
+  const [lessons, setLessons] = useState(null);
+  const [facilitiesLessons, setFacilitiesLessons] = useState(null);
+  const [openLessons, setOpenLessons] = useState(null);
 
   useEffect(() => {
     setSession(supabase.auth.session());
@@ -61,24 +64,87 @@ export const UserProvider = ({ children }) => {
     setUuidName(data);
   };
 
+  const selectLessons = async () => {
+    let { data, error } = await supabase.from("lessons").select();
+    setLessons(data);
+    console.log(data);
+  };
+
+  const selectMessages = async () => {
+    let { data, error } = await supabase
+      .from("messaging")
+      .select("*")
+      .or(
+        `profile_sent.eq.${userData[0].id},profile_received.eq.${userData[0].id}`
+      );
+    setMessages(data);
+  };
+
+  const subscribeMessage = supabase
+    .from("messaging")
+    .on("*", () => {
+      if (userData != null) {
+        selectMessages();
+      }
+    })
+    .subscribe();
+
+  const subscribeLessons = supabase
+    .from("lessons")
+    .on("*", () => {
+      selectLessons();
+    })
+    .subscribe();
+
   useEffect(() => {
-    if (session != null && sessionLoading == false) {
+    if (session !== null && sessionLoading == false) {
       selectUserData();
       selectUser();
       selectEvents();
       selectLocation();
       selectStudents();
       selectUuidName();
+      selectLessons();
       setLoading(false);
     }
   }, [session]);
+
+  useEffect(() => {
+    if (userData !== null) {
+      selectMessages();
+    }
+  }, [userData]);
 
   useEffect(() => {
     if (nameModleLoading == false) {
       newUser();
     }
   }, [nameModleLoading]);
+/*
+  useEffect(() => {
+    if (lessons !== null && facilities !== null && events !== null) {
+      const openFacilities = facilities.filter((facilitie) => {
+        return events.some((event) => event.location === facilitie.id);
+      });
+      setFacilitiesLessons(openFacilities);
+    }
+  }, [lessons, facilities, events]);
 
+  useEffect(() => {
+    if (lessons !== null && events !== null && facilitiesLessons !== null) {
+      const openLessons = events.filter((event) => {
+        return lessons.some((lesson) => lesson.event === event.id);
+      });
+      const newOpenLessons = openLessons.map((lesson) => {
+        const facility = facilitiesLessons.find(
+          (fac) => fac.id === lesson.location
+        );
+        return { ...lesson, facility };
+      });
+      setOpenLessons(newOpenLessons);
+    }
+  }, [lessons, events, facilitiesLessons]);
+*/
   return (
     <UserContext.Provider
       value={{
@@ -100,10 +166,16 @@ export const UserProvider = ({ children }) => {
         setFacilities,
         studentNames,
         setStudentNames,
-        showMessaging,
-        setShowMessaging,
         uuidName,
         setUuidName,
+        messages,
+        setMessages,
+        lessons,
+        setLessons,
+        facilitiesLessons,
+        setFacilitiesLessons,
+        openLessons,
+        setOpenLessons
       }}
     >
       {children}
